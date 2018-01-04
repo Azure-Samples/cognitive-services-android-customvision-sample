@@ -26,6 +26,15 @@ The model provided with the sample recognizes some fruits. to replace it with yo
 
 *This sample is tested on Pixel devices*
 
+Make sure the mean values (IMAGE_MEAN_R, IMAGE_MEAN_G, IMAGE_MEAN_B in MSCognitiveServicesClassifier.java) are correct based on your project's domain in Custom Vision:
+
+|  Project's Domain  | Mean Values (RGB) |
+|--------------------|-------------------|
+|  General (compact) |  (123, 117, 104)  |
+|  Landmark (compact)|  (123, 117, 104)  |
+|  Retail (compact)  |  (0, 0, 0)        |
+
+
 ## Resources
 - Link to [TensorFlow documentation](https://www.tensorflow.org/mobile/)
 - Link to [Custom Vision Service Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/home)
