@@ -42,10 +42,6 @@ public class MSCognitiveServicesClassifier {
     private int numberOfClasses = 0;
 
     private static final int INPUT_SIZE = 227;
-    private static final float IMAGE_MEAN_R = 124.f;
-    private static final float IMAGE_MEAN_G = 117.f;
-    private static final float IMAGE_MEAN_B = 105.f;
-    private static final float IMAGE_STD = 1.f;
     private static final String INPUT_NAME = "Placeholder";
     private static final String OUTPUT_NAME = "loss";
 
@@ -95,9 +91,9 @@ public class MSCognitiveServicesClassifier {
         for (int i = 0; i < intValues.length; ++i) {
             final int val = intValues[i];
 
-            floatValues[i * 3 + 0] = ((val & 0xFF) - IMAGE_MEAN_B) / IMAGE_STD;
-            floatValues[i * 3 + 1] = (((val >> 8) & 0xFF) - IMAGE_MEAN_G) / IMAGE_STD;
-            floatValues[i * 3 + 2] = (((val >> 16) & 0xFF) - IMAGE_MEAN_R) / IMAGE_STD;
+            floatValues[i * 3 + 0] = (float)(val & 0xFF);
+            floatValues[i * 3 + 1] = (float)((val >> 8) & 0xFF);
+            floatValues[i * 3 + 2] = (float)((val >> 16) & 0xFF);
         }
 
         inferenceInterface.feed(INPUT_NAME, floatValues, 1, INPUT_SIZE, INPUT_SIZE, 3);
