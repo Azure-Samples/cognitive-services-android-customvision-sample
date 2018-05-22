@@ -27,7 +27,7 @@ The model provided with the sample recognizes some fruits. To replace it with yo
 *This sample is tested on Pixel devices*
 
 ### Compatibility
-For Tensorflow models exported **before May 1, 2018** you will need to subtract the mean values according to the table below based on your project's domain in Custom Vision:
+For Tensorflow models exported **before May 1, 2018** you will need to subtract the mean values according to the table below based on your project's domain in Custom Vision. These models don't have the normalization baked in.
 
 |  Project's Domain  | Mean Values (RGB) |
 |--------------------|-------------------|
@@ -35,21 +35,14 @@ For Tensorflow models exported **before May 1, 2018** you will need to subtract 
 |  Landmark (compact)|  (123, 117, 104)  |
 |  Retail (compact)  |  (0, 0, 0)        |
 
-The subtraction can be done by changing the loop just after resizedBitmap.getPixels in the **classifyImage** method (in *MSCognitiveServicesClassifier.java*) to do the subtraction::
+The subtraction can be done by changing the values in the else path for hasNormalizationLayer just after resizedBitmap.getPixels in the **classifyImage** method (in *MSCognitiveServicesClassifier.java*) to do the subtraction::
 
 ```java
-    // These values should match the table based on the compact domain used to train
-    float IMAGE_MEAN_R = 124.f;
-    float IMAGE_MEAN_G = 117.f;
-    float IMAGE_MEAN_B = 105.f;
-    float IMAGE_STD = 1.f;
-
-    for (int i = 0; i < intValues.length; ++i) {
-        final int val = intValues[i];
- 
-        floatValues[i * 3 + 0] = ((val & 0xFF) - IMAGE_MEAN_B) / IMAGE_STD;
-        floatValues[i * 3 + 1] = (((val >> 8) & 0xFF) - IMAGE_MEAN_G) / IMAGE_STD;
-        floatValues[i * 3 + 2] = (((val >> 16) & 0xFF) - IMAGE_MEAN_R) / IMAGE_STD;
+    {
+        // This is an older model without mean normalization layer and needs to do mean subtraction.
+        IMAGE_MEAN_R = 124.f;
+        IMAGE_MEAN_G = 117.f;
+        IMAGE_MEAN_B = 105.f;
     }
 ```
 
