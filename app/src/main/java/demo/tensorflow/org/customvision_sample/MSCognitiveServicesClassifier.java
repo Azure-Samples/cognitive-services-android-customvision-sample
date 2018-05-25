@@ -25,6 +25,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import junit.framework.Assert;
+
+import org.tensorflow.Operation;
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -40,14 +42,13 @@ public class MSCognitiveServicesClassifier {
     private TensorFlowInferenceInterface inferenceInterface;
     private Vector<String> labels = new Vector<String>();
     private int numberOfClasses = 0;
+    private boolean hasNormalizationLayer = false;
 
     private static final int INPUT_SIZE = 227;
-    private static final float IMAGE_MEAN_R = 124.f;
-    private static final float IMAGE_MEAN_G = 117.f;
-    private static final float IMAGE_MEAN_B = 105.f;
-    private static final float IMAGE_STD = 1.f;
+    private static final int RESIZE_SIZE = 256;
     private static final String INPUT_NAME = "Placeholder";
     private static final String OUTPUT_NAME = "loss";
+    private static final String DATA_NORM_LAYER_PREFIX = "data_bn";
 
     static {
         System.loadLibrary("tensorflow_inference");
@@ -55,6 +56,18 @@ public class MSCognitiveServicesClassifier {
 
     public MSCognitiveServicesClassifier(final Context context) {
         inferenceInterface = new TensorFlowInferenceInterface(context.getAssets(), MODEL_FILE);
+
+        // Look to see if this graph has a data normalization layer, if so we don't need to do
+        // mean subtraction on the image.
+        java.util.Iterator<org.tensorflow.Operation> opIter = inferenceInterface.graph().operations();
+        while(opIter.hasNext()) {
+            org.tensorflow.Operation op = opIter.next();
+            if (op.name().contains(DATA_NORM_LAYER_PREFIX)) {
+                hasNormalizationLayer = true;
+                break;
+            }
+        }
+
         loadLabels(context);
     }
 
@@ -76,7 +89,6 @@ public class MSCognitiveServicesClassifier {
         } catch (IOException e) {
             throw new RuntimeException("error reading labels file!", e);
         }
-
     }
 
     public Classifier.Recognition classifyImage(Bitmap sourceImage, int orientation) {
@@ -92,12 +104,29 @@ public class MSCognitiveServicesClassifier {
 
         resizedBitmap.getPixels(intValues, 0, resizedBitmap.getWidth(), 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight());
 
+        final float IMAGE_MEAN_R;
+        final float IMAGE_MEAN_G;
+        final float IMAGE_MEAN_B;
+        if (hasNormalizationLayer)
+        {
+            // Mean subtraction is baked into the model.
+            IMAGE_MEAN_R = 0.f;
+            IMAGE_MEAN_G = 0.f;
+            IMAGE_MEAN_B = 0.f;
+        }
+        else
+        {
+            // This is an older model without mean normalization layer and needs to do mean subtraction.
+            IMAGE_MEAN_R = 124.f;
+            IMAGE_MEAN_G = 117.f;
+            IMAGE_MEAN_B = 105.f;
+        }
+
         for (int i = 0; i < intValues.length; ++i) {
             final int val = intValues[i];
-
-            floatValues[i * 3 + 0] = ((val & 0xFF) - IMAGE_MEAN_B) / IMAGE_STD;
-            floatValues[i * 3 + 1] = (((val >> 8) & 0xFF) - IMAGE_MEAN_G) / IMAGE_STD;
-            floatValues[i * 3 + 2] = (((val >> 16) & 0xFF) - IMAGE_MEAN_R) / IMAGE_STD;
+            floatValues[i * 3 + 0] = (float)(val & 0xFF) - IMAGE_MEAN_B;
+            floatValues[i * 3 + 1] = (float)((val >> 8) & 0xFF) - IMAGE_MEAN_G;
+            floatValues[i * 3 + 2] = (float)((val >> 16) & 0xFF) - IMAGE_MEAN_R;
         }
 
         inferenceInterface.feed(INPUT_NAME, floatValues, 1, INPUT_SIZE, INPUT_SIZE, 3);
@@ -121,16 +150,26 @@ public class MSCognitiveServicesClassifier {
     // Copyright 2017 The TensorFlow Authors.  All rights reserved.
     public static void cropAndRescaleBitmap(final Bitmap src, final Bitmap dst, int sensorOrientation) {
         Assert.assertEquals(dst.getWidth(), dst.getHeight());
-        final float minDim = Math.min(src.getWidth(), src.getHeight());
+        final float maxDim = Math.max(src.getWidth(), src.getHeight());
 
         final Matrix matrix = new Matrix();
 
+        // Scale to max dim of 1600 first
+        if (maxDim > 1600) {
+            final float scale = (src.getWidth() > src.getHeight()) ?
+                    1600.0f / src.getWidth() :
+                    1600.0f / src.getHeight();
+            matrix.preScale(scale, scale);
+        }
+
+        final float minDim = Math.min(src.getWidth(), src.getHeight());
         // We only want the center square out of the original rectangle.
         final float translateX = -Math.max(0, (src.getWidth() - minDim) / 2);
         final float translateY = -Math.max(0, (src.getHeight() - minDim) / 2);
         matrix.preTranslate(translateX, translateY);
 
-        final float scaleFactor = dst.getHeight() / minDim;
+        // Resize down to RESIZE_SIZE
+        final float scaleFactor = RESIZE_SIZE / minDim;
         matrix.postScale(scaleFactor, scaleFactor);
 
         // Rotate around the center if necessary.
@@ -139,6 +178,9 @@ public class MSCognitiveServicesClassifier {
             matrix.postRotate(sensorOrientation);
             matrix.postTranslate(dst.getWidth() / 2.0f, dst.getHeight() / 2.0f);
         }
+
+        // Center crop the out an INPUT_SIZE rectangle
+        matrix.postTranslate(-(RESIZE_SIZE - INPUT_SIZE) / 2, -(RESIZE_SIZE - INPUT_SIZE) / 2);
 
         final Canvas canvas = new Canvas(dst);
         canvas.drawBitmap(src, matrix, null);
