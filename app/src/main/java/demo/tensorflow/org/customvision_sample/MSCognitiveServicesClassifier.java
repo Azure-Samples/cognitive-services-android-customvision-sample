@@ -48,7 +48,7 @@ public class MSCognitiveServicesClassifier {
     private static final int RESIZE_SIZE = 256;
     private static final String INPUT_NAME = "Placeholder";
     private static final String OUTPUT_NAME = "loss";
-    private static final String DATA_NORM_LAYER_PREFIX = "data_bn";
+    private static final String[] DATA_NORM_LAYER_PREFIX = {"data_bn", "BatchNorm1"};
 
     static {
         System.loadLibrary("tensorflow_inference");
@@ -60,11 +60,13 @@ public class MSCognitiveServicesClassifier {
         // Look to see if this graph has a data normalization layer, if so we don't need to do
         // mean subtraction on the image.
         java.util.Iterator<org.tensorflow.Operation> opIter = inferenceInterface.graph().operations();
-        while(opIter.hasNext()) {
+        while (opIter.hasNext() && !hasNormalizationLayer) {
             org.tensorflow.Operation op = opIter.next();
-            if (op.name().contains(DATA_NORM_LAYER_PREFIX)) {
-                hasNormalizationLayer = true;
-                break;
+            for (String normLayerPrefix : DATA_NORM_LAYER_PREFIX) {
+                if (op.name().contains(normLayerPrefix)) {
+                    hasNormalizationLayer = true;
+                    break;
+                }
             }
         }
 
