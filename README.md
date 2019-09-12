@@ -1,7 +1,11 @@
 ---
-services: cognitive-services,custom-vision
-platforms: java, Android
-author: aminbagheri
+page_type: sample
+languages:
+- java
+products:
+- azure
+description: "This sample application demonstrates how to take a model exported from the Custom Vision Service in the TensorFlow format and add it to an application for real-time image classification."
+urlFragment: cognitive-services-android-customvision-sample
 ---
 
 # Sample Android application for TensorFlow models exported from Custom Vision Service
