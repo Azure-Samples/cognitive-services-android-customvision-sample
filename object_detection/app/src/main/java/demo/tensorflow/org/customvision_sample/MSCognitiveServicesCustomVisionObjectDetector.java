@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
-import ai.customvision.visionskills.VisionSkillsManager;
+import ai.customvision.CustomVisionManager;
 //import ai.customvision.tfnormal.ObjectDetector; // TensorFlow normal
 import ai.customvision.tflite.ObjectDetector; // TensorFlow Lite
 
@@ -50,7 +50,7 @@ public class MSCognitiveServicesCustomVisionObjectDetector implements demo.tenso
      */
     public MSCognitiveServicesCustomVisionObjectDetector(final Context context) {
         // Tell Custom Vision inference run-time the application context so that it can load the model file
-        VisionSkillsManager.setAppContext(context);
+        CustomVisionManager.setAppContext(context);
 
         // Build a config object for ImageClassifier
         // Specify the folder that contains the model file and its manifest file
