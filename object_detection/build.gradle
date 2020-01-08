@@ -22,15 +22,6 @@ allprojects {
         flatDir {
             dirs "${rootDir}/../aars"
         }
-
-        // Import artifacts from Azure DevOps
-        def bUseAzureArtifacts = Boolean.valueOf(useAzureArtifacts)
-        if (bUseAzureArtifacts) {
-            apply from: "${rootDir}/../../BuildScripts/AddAzureArtifactsRepository.gradle"
-        }
-
-        // Import from Maven Local
-        //mavenLocal()
     }
 }
 
