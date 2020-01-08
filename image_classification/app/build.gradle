@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "demo.tensorflow.org.customvision_sample"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            java.exclude "demo/tensorflow/org/customvision_sample/obsolete/**"
+        }
+    }
+    aaptOptions {
+        noCompress "tflite"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support:appcompat-v7:26.+'
+    testImplementation 'junit:junit:4.12'
+
+    // To use TensorFlow normal version (non-Lite), uncomment the two lines below and comment out the following two lines
+    // Also update MSCognitiveServicesCustomVisionObjectDetector.java
+    //implementation 'org.tensorflow:tensorflow-android:+'
+    //implementation 'ai.customvision.android:inference-tensorflow-libcpp:+@aar'
+    implementation 'org.tensorflow:tensorflow-lite:+'
+    implementation 'ai.customvision.android:inference-tensorflow-lite-libcpp:+@aar'
+}

@@ -1,0 +1,12 @@
+{
+  "DomainType": "Classification",
+  "Platform": "TensorFlow",
+  "Flavor": "TensorFlowLite",
+  "ExporterVersion": "2.0",
+  "ExportedDate": "2019-06-14T07:51:00.7947662Z",
+  "IterationId": "f87da675-127d-e911-b83f-6c2b59f4d3b3",
+  "ModelFileName": "model.tflite",
+  "LabelFileName": "labels.txt",
+  "ModelFileSHA1": "7006897fe77fb1289b8b6f8af781fd0c1df1bf2b",
+  "SchemaVersion": "1.0"
+}
