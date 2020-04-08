@@ -66,6 +66,9 @@ This latest sample application relies on the new Android library *Custom Vision 
 |                   | Work with model version 2.x |
 |                   | Not work with model version 3.0 or higher |
 
+#### Supported architectures
+
+ARMv7, x86 
 
 ## Resources
 - Link to [TensorFlow documentation](https://www.tensorflow.org/mobile/)
