@@ -31,7 +31,7 @@ public class MSCognitiveServicesCustomVisionClassifier implements ICognitiveServ
     private static String TAG = MSCognitiveServicesCustomVisionClassifier.class.getSimpleName();
 
     // Specify the path of manifest file about the model to use
-    private static String ModelManifestPath = "fruits-tflite/cvexport.manifest";  // TensorFlow Lite model (.tflite)
+    private static String ModelManifestPath = "sample-tflite.cvmodel/cvexport.manifest";  // TensorFlow Lite model (.tflite)
 
     /**
      * ImageClassifier instance responsible to run inference
