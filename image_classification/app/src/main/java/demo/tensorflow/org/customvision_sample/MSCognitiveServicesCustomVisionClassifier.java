@@ -30,6 +30,9 @@ import ai.customvision.tflite.ImageClassifier;
 public class MSCognitiveServicesCustomVisionClassifier implements ICognitiveServicesClassifier, AutoCloseable {
     private static String TAG = MSCognitiveServicesCustomVisionClassifier.class.getSimpleName();
 
+    // Specify the path of manifest file about the model to use
+    private static String ModelManifestPath = "sample-tflite.cvmodel/cvexport.manifest";  // TensorFlow Lite model (.tflite)
+
     /**
      * ImageClassifier instance responsible to run inference
      */
@@ -44,9 +47,8 @@ public class MSCognitiveServicesCustomVisionClassifier implements ICognitiveServ
         CustomVisionManager.setAppContext(context);
 
         // Build a config object for ImageClassifier
-        // Specify the folder that contains the model file and its manifest file
         ImageClassifier.Configuration config = ImageClassifier.ConfigurationBuilder()
-                .setModelFile("fruits-tflite/cvexport.manifest").build();
+                .setModelFile(ModelManifestPath).build();
 
         // Instantiate an ImageClassifier
         classifierRuntime = new ImageClassifier(config);

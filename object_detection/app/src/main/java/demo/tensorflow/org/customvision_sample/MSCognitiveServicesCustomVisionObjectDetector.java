@@ -38,6 +38,10 @@ import demo.tensorflow.org.customvision_sample.ObjectDetector.BoundingBox;
 public class MSCognitiveServicesCustomVisionObjectDetector implements demo.tensorflow.org.customvision_sample.ObjectDetector, AutoCloseable {
     private static String TAG = MSCognitiveServicesCustomVisionObjectDetector.class.getSimpleName();
 
+    // Specify the path of manifest file about the model to use
+    // private static String ModelManifestPath = "sample.cvmodel/cvexport.manifest";  // TensorFlow model (.pb)
+    private static String ModelManifestPath = "sample-tflite.cvmodel/cvexport.manifest";  // TensorFlow Lite model (.tflite)
+
     /**
      * ImageClassifier instance responsible to run inference
      */
@@ -53,10 +57,8 @@ public class MSCognitiveServicesCustomVisionObjectDetector implements demo.tenso
         CustomVisionManager.setAppContext(context);
 
         // Build a config object for ImageClassifier
-        // Specify the folder that contains the model file and its manifest file
         ObjectDetector.Configuration config = ObjectDetector.ConfigurationBuilder()
-                //.setModelFile("sample.cvmodel/cvexport.manifest").build(); // TensorFlow model (.pb)
-                .setModelFile("sample-tflite.cvmodel/cvexport.manifest").build(); // TensorFlow Lite model (.tflite)
+                .setModelFile(ModelManifestPath).build();
 
         // Remember supported identifiers to get index of class
         supportedIdentifiers = Arrays.asList(config.SupportedIdentifiers.getStringVector());

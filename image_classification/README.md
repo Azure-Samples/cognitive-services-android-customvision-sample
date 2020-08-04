@@ -34,7 +34,7 @@ The model provided with the sample recognizes some fruits. To replace it with yo
       - Labels (`.txt`)
       - Export manifest file (`cvexport.manifest`).
 
-  3. Drop all of `model.tflite`, `labels.txt` and `cvexport.manifest` into your Android project's Assets folder.
+  3. Drop all of `model.tflite`, `labels.txt` and `cvexport.manifest` into your Android project's `assets/sample-tflite.cvmodel` folder.
   
   4. Build and run.
 

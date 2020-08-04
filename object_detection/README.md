@@ -33,7 +33,7 @@ The model provided with the sample recognizes dogs and cats. To replace it with 
       - Labels (`.txt`)
       - Export manifest file (`cvexport.manifest`).
 
-  3. Drop all of `model.tflite`, `labels.txt` and `cvexport.manifest` into your Android project's Assets folder.
+  3. Drop all of `model.tflite`, `labels.txt` and `cvexport.manifest` into your Android project's `assets/sample-tflite.cvmodel` folder.
 
   4. Build and run.
 
