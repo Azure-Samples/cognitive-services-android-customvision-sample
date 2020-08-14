@@ -1,5 +1,5 @@
 ---
-services: cognitive-services,custom-vision
+services: cognitive-services, custom-vision
 platforms: java, Android
 author: aminbagheri, yeohan
 ---
@@ -17,7 +17,7 @@ This sample application demonstrates how a [Custom Vision Service](https://www.c
 - An account at [Custom Vision Service](https://www.customvision.ai) 
 
 
-### Quickstart
+### QuickStart
 
 1. Clone the repository and open the project `image_classification` in Android Studio
 2. Build and run the sample on your Android device
@@ -26,7 +26,7 @@ This sample application demonstrates how a [Custom Vision Service](https://www.c
 ### Replacing the sample model with your own classifier 
 The model provided with the sample recognizes some fruits. To replace it with your own model exported from [Custom Vision Service](https://www.customvision.ai) do the following, and then build and launch the application:
 
-  1. [Create and train](https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/getting-started-build-a-classifier) a classifer with the Custom Vision Service. You must choose a "compact" domain such as **General (compact)** to be able to export your classifier. If you have an existing classifier you want to export instead, convert the domain in "settings" by clicking on the gear icon at the top right. In setting, choose a "compact" model, Save, and Train your project.
+  1. [Create and train](https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/getting-started-build-a-classifier) a classifier with the Custom Vision Service. You must choose a "compact" domain such as **General (compact)** to be able to export your classifier. If you have an existing classifier you want to export instead, convert the domain in "settings" by clicking on the gear icon at the top right. In setting, choose a "compact" model, Save, and Train your project.
 
 
   2. Export your model by going to the Performance tab. Select an iteration trained with a compact domain, an "Export" button will appear. Click on *Export* then *TensorFlow Lite* then *Export.* Click the *Download* button when it appears. A *.zip* file will download that contains all of these three files:
@@ -56,7 +56,7 @@ This latest sample application relies on the new Android library *Custom Vision 
 
         - Major version is same but minor version is greater: Still works. Run inference.
 
-    - __Backward compatiblity__: Any newer version of the run-time should be able to handle older model versions.
+    - __Backward compatibility__: Any newer version of the run-time should be able to handle older model versions.
 
 #### Supported model versions
 
