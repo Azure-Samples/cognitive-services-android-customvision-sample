@@ -62,7 +62,7 @@ This latest sample application relies on the new Android library *Custom Vision 
 
 | Run-time version  | Model version |
 |--:                |--             |
-| Run-time 1.0.0    | Work with model version 1.x |
+| Run-time 1.1.1    | Work with model version 1.x |
 |                   | Work with model version 2.x |
 |                   | Not work with model version 3.0 or higher |
 
