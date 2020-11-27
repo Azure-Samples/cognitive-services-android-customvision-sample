@@ -68,7 +68,7 @@ This latest sample application relies on the new Android library *Custom Vision 
 
 #### Supported architectures
 
-ARMv7, x86 
+ARMv7, ARM64, x86
 
 ## Resources
 - Link to [TensorFlow documentation](https://www.tensorflow.org/mobile/)
